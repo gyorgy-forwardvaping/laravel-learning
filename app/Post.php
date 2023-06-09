@@ -15,4 +15,9 @@ class Post extends Model {
     protected $dates = ['post_deleted_at'];
 
     protected $fillable = ['post_title', 'post_body', 'post_deleted_at'];
+
+    public function user() {
+        //class which field with relation wich id in search
+        return $this->belongsTo('App\User', 'post_user_id', 'user_id');
+    }
 }

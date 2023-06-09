@@ -9,12 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable {
     use Notifiable;
-    use SoftDeletes;
+    /**
+     * SoftDeletes commented out because we don't use it in users table
+     */
+    // use SoftDeletes;
+
 
     //table name if not same as model
-    protected $table = "tbl_posts";
+    protected $table = "tbl_users";
     //id if not "id"
-    protected $primaryKey = "post_id";
+    protected $primaryKey = "user_id";
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +48,16 @@ class User extends Authenticatable {
     ];
 
     public function post() {
+        //class which field with relation wich id in search
         return $this->hasOne('App\Post', 'post_user_id', 'post_id');
+    }
+
+    public function posts() {
+        return $this->hasMany('App\Post', 'post_user_id');
+    }
+
+    public function roles() {
+        //class, pivot table, field name(s)
+        return $this->belongsToMany('App\Role', 'role_tbl_users', 'user_id');
     }
 }

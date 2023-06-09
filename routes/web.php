@@ -136,3 +136,29 @@ use App\User;
 Route::get('/user/{user_id}/post', function ($user_id) {
     return User::find($user_id)->post->post_title;
 });
+
+
+
+Route::get('/post/{post_id}/user', function ($post_id) {
+    return Post::find($post_id)->user->user_name;
+});
+
+//1 to n relationship
+Route::get('/posts/{user_id}', function ($user_id) {
+    $user = User::find($user_id);
+
+    $title = [];
+    echo '<pre>';
+    foreach ($user->posts as $post) {
+        print_r($post);
+    }
+    echo '</pre>';
+});
+
+Route::get('user/{user_id}/role', function ($user_id) {
+    $user = User::find($user_id)->roles()->orderBy('id', 'desc')->get();
+    return $user;
+    // foreach ($user->roles as $role) {
+    //     return $role->name;
+    // }
+});
