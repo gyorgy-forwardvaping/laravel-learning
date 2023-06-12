@@ -57,7 +57,7 @@ class User extends Authenticatable {
     }
 
     public function roles() {
-        //class, pivot table, field name(s)
-        return $this->belongsToMany('App\Role', 'role_tbl_users', 'user_id');
+        //class, pivot table, field name(s) foreign keys
+        return $this->belongsToMany('App\Role', 'role_tbl_users', 'user_id')->withPivot('created_at');
     }
 }

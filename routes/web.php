@@ -1,10 +1,11 @@
 <?php
 
 use App\Post;
+use App\User;
+use App\Country;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,7 +159,19 @@ Route::get('/posts/{user_id}', function ($user_id) {
 Route::get('user/{user_id}/role', function ($user_id) {
     $user = User::find($user_id)->roles()->orderBy('id', 'desc')->get();
     return $user;
-    // foreach ($user->roles as $role) {
-    //     return $role->name;
-    // }
+});
+
+//intermediate table pivot
+
+Route::get('/user/{user_id}/pivot', function ($user_id) {
+    $user = User::find($user_id);
+    foreach ($user->roles as $role) {
+        echo $role->pivot->created_at;
+    }
+});
+Route::get('user/{country_id}/country', function ($country_id) {
+    $country = Country::find($country_id);
+    foreach ($country->posts as $post) {
+        echo $post->post_title . ', ';
+    }
 });
