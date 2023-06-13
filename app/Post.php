@@ -20,4 +20,12 @@ class Post extends Model {
         //class which field with relation wich id in search
         return $this->belongsTo('App\User', 'post_user_id', 'user_id');
     }
+
+    public function photos() {
+        return $this->morphMany('App\Photo', 'imageable');
+    }
+
+    public function tags() {
+        return $this->morphToMany('App\Tag', 'taggable');
+    }
 }

@@ -6,6 +6,8 @@ use App\Country;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Photo;
+use App\Tag;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +29,9 @@ use App\Http\Controllers\PostController;
 //all crud
 // Route::resource('/post', 'PostController');
 
-// Route::get('/insert', function () {
-//     DB::insert('INSERT INTO tbl_posts (post_title, post_body, post_is_admin) VALUES (?,?,?)', ['PHP with Laravel 2', 'PHP Laravel best thing has happened with php 2', 0]);
-// });
+Route::get('/insert', function () {
+    DB::insert('INSERT INTO tbl_posts (post_title, post_body, post_is_admin) VALUES (?,?,?)', ['PHP with Laravel 2', 'PHP Laravel best thing has happened with php 2', 0]);
+});
 
 // Route::get('/read', function () {
 //     $result = DB::select('SELECT * FROM tbl_posts where post_id = ?', [1]);
@@ -169,9 +171,60 @@ Route::get('/user/{user_id}/pivot', function ($user_id) {
         echo $role->pivot->created_at;
     }
 });
+
 Route::get('user/{country_id}/country', function ($country_id) {
     $country = Country::find($country_id);
     foreach ($country->posts as $post) {
         echo $post->post_title . ', ';
     }
+});
+
+Route::get('photo/{user_id}/user', function ($user_id) {
+    $user = User::find($user_id);
+    foreach ($user->photos as $photo) {
+        return $photo->path;
+    }
+});
+
+Route::get('photo/{post_id}/post', function ($post_id) {
+    $post = Post::find($post_id);
+    foreach ($post->photos as $photo) {
+        return $photo->path;
+    }
+});
+
+//polymorphic inverse
+Route::get('photo/{id}/post-new', function ($id) {
+    $photo = Photo::findOrFail($id);
+    $imageable = $photo->imageable;
+
+    return $imageable;
+});
+
+Route::get('/tag/post', function () {
+    $tag = Tag::find(2);
+
+    foreach ($tag->post as $post) {
+        echo $post->post_title;
+    }
+});
+
+Route::get('/tag/video', function () {
+    $tag = Tag::find(1);
+
+    foreach ($tag->videos as $post) {
+        echo $post->name;
+    }
+});
+
+Route::get('tag/{id}/posts', function ($id) {
+    $post = Post::find($id);
+    foreach ($post->tags as $tag) {
+        echo $tag->name;
+    }
+    return $post;
+});
+Route::get('tag/{id}/videos', function ($id) {
+});
+Route::get('tag/{id}', function ($id) {
 });

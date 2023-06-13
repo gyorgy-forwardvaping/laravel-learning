@@ -60,4 +60,7 @@ class User extends Authenticatable {
         //class, pivot table, field name(s) foreign keys
         return $this->belongsToMany('App\Role', 'role_tbl_users', 'user_id')->withPivot('created_at');
     }
+    public function photos() {
+        return $this->morphMany('App\Photo', 'imageable');
+    }
 }
